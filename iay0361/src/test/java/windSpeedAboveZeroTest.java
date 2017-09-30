@@ -1,5 +1,6 @@
 import org.junit.Test;
 import weatherApi.WeatherApi;
+import weatherApi.WeatherReport;
 
 import static org.junit.Assert.assertTrue;
 
@@ -8,7 +9,8 @@ public class windSpeedAboveZeroTest {
     public void testWindSpeedAboveZero(){
         try {
             WeatherApi api = new WeatherApi();
-            double currentWindSpeed = api.getCurrentCoordsWind("35", "139");
+            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            double currentWindSpeed = report.getDayWindSpeed();
             assertTrue(currentWindSpeed >= 0);
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 import org.junit.Test;
 import weatherApi.WeatherApi;
+import weatherApi.WeatherReport;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -9,7 +10,8 @@ public class getWindDegreeAboveZeroTest {
     public void WindDegreeAboveZero() {
         try {
             WeatherApi api = new WeatherApi();
-            double degree = api.getDayWindDegree().get(0);
+            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            double degree = report.getDayWindDegree();
             assertTrue(degree >= 0);
         } catch (Exception e) {
             fail("Found negative wind degree.");

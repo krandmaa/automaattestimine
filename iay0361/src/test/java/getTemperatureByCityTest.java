@@ -1,5 +1,6 @@
 import org.junit.Test;
 import weatherApi.WeatherApi;
+import weatherApi.WeatherReport;
 
 import static org.junit.Assert.assertTrue;
 
@@ -9,7 +10,8 @@ public class getTemperatureByCityTest {
         double dayAverageTempCelsius = -273;
         try {
             WeatherApi api = new WeatherApi();
-            dayAverageTempCelsius = api.getCurrentCityTemp("Tallinn");
+            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            dayAverageTempCelsius = report.getCurrentTemp();
         } catch (Exception e) {
             e.printStackTrace();
         }

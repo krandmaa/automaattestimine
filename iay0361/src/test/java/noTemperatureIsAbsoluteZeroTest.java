@@ -1,5 +1,6 @@
 import org.junit.Test;
 import weatherApi.WeatherApi;
+import weatherApi.WeatherReport;
 
 import java.util.ArrayList;
 
@@ -11,10 +12,11 @@ public class noTemperatureIsAbsoluteZeroTest {
     public void testTemperatureAboveAbsoluteZero() {
         try {
             WeatherApi api = new WeatherApi();
-            ArrayList<Integer> threeDayTemperatures = api.getThreeDayTemperatures();
+            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            ArrayList<Double> threeDayTemperatures = report.getThreeDayTemperatures();
             int absoluteZero = -273;
 
-            for (int temp : threeDayTemperatures) {
+            for (double temp : threeDayTemperatures) {
                 if (temp <= absoluteZero) {
                     fail("Lower than absolute zero temperature found!");
                 }

@@ -1,13 +1,18 @@
 package weatherApi;
 
-import java.util.ArrayList;
 
 public class WeatherApi {
-    public ArrayList<Double> getDayWindDegree() {
+
+    public WeatherReport createWeatherReport(String city, String country, String format) {
+        return new WeatherReport(city, country, format);
+    }
+
+    public String getForecastFileName() {
         return null;
     }
 
-    public double getCurrentCoordsTemp(String s, String s1) {
-        return 0;
+
+    public WeatherReport createWeatherReport(double latitude, double longitude) {
+        return new WeatherReport(latitude, longitude);
     }
 }

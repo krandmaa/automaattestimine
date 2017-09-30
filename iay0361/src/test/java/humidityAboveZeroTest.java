@@ -1,5 +1,6 @@
 import org.junit.Test;
 import weatherApi.WeatherApi;
+import weatherApi.WeatherReport;
 
 import static org.junit.Assert.assertTrue;
 
@@ -8,7 +9,8 @@ public class humidityAboveZeroTest {
     public void testHumidityBelowHundred(){
         try {
             WeatherApi api = new WeatherApi();
-            double currentHumidity = api.getCurrentCoordsHumidity("35", "139");
+            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            double currentHumidity = report.getCurrentHumidity();
             assertTrue(currentHumidity >= 0);
         } catch (Exception e) {
             e.printStackTrace();

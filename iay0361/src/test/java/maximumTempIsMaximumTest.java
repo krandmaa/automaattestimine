@@ -1,7 +1,7 @@
 import org.junit.Test;
 import weatherApi.WeatherApi;
+import weatherApi.WeatherReport;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertTrue;
@@ -12,8 +12,9 @@ public class maximumTempIsMaximumTest {
     public void testDailyMaximumTemperature() {
         try {
             WeatherApi api = new WeatherApi();
-            ArrayList<Integer> oneDayTemperatures = api.getDayTemperatures(LocalDate.now());
-            double maxTemp = api.getDayMaxTemp(LocalDate.now());
+            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            ArrayList<Double> oneDayTemperatures = report.getCurrentDayTemperatures();
+            double maxTemp = report.getDayMaxTemp();
 
             for (double temp : oneDayTemperatures) {
                 if (temp > maxTemp) {

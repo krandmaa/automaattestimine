@@ -1,5 +1,6 @@
 import org.junit.Test;
 import weatherApi.WeatherApi;
+import weatherApi.WeatherReport;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,8 @@ public class threeDayTempForecastCountCorrectTest {
     public void GetThreeDayTemperaturesCountCorrect() {
         try {
             WeatherApi api = new WeatherApi();
-            ArrayList<Double> oneDayTemps = api.getThreeDayTemperatures();
+            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            ArrayList<Double> oneDayTemps = report.getCurrentDayTemperatures();
 
             assertTrue(oneDayTemps.size() <= 24);
         } catch (Exception e) {

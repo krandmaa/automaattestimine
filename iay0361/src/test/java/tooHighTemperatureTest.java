@@ -1,5 +1,6 @@
 import org.junit.Test;
 import weatherApi.WeatherApi;
+import weatherApi.WeatherReport;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,8 @@ public class tooHighTemperatureTest {
     public void testTemperatureNotTooHot() {
         try {
             WeatherApi api = new WeatherApi();
-            ArrayList<Double> threeDayTemperatures = api.getThreeDayTemperatures();
+            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            ArrayList<Double> threeDayTemperatures = report.getThreeDayTemperatures();
             int abnormallyHotTemperature = 150;
 
             for (double temp : threeDayTemperatures) {

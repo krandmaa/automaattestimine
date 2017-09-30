@@ -1,5 +1,6 @@
 import org.junit.Test;
 import weatherApi.WeatherApi;
+import weatherApi.WeatherReport;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,8 @@ public class temperaturesInKelvinTest {
     public void testTemperaturesInKelvinAboveZero() {
         try {
             WeatherApi api = new WeatherApi();
-            ArrayList<Double> threeDayTemperatures = api.getThreeDayTemperatures();
+            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "standard");
+            ArrayList<Double> threeDayTemperatures = report.getThreeDayTemperatures();
             for (double temp : threeDayTemperatures) {
                 if (temp <= 0) {
                     fail("Impossible kelvin temperature");
