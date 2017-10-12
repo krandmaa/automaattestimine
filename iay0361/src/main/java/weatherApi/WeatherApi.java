@@ -1,10 +1,13 @@
-package weatherApi;
+package weatherapi;
 
 
 public class WeatherApi {
 
+    private WeatherReport report;
+
     public WeatherReport createWeatherReport(String city, String country, String format) {
-        return new WeatherReport(city, country, format);
+        this.report = new WeatherReport(city, country, format);
+        return report;
     }
 
     public String getForecastFileName() {

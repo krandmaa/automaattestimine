@@ -1,6 +1,6 @@
 import org.junit.Test;
-import weatherApi.WeatherApi;
-import weatherApi.WeatherReport;
+import weatherapi.WeatherApi;
+import weatherapi.WeatherReport;
 
 import java.util.ArrayList;
 

@@ -1,12 +1,40 @@
-package weatherApi;
+package weatherapi;
+
+import urlfilereader.UrlFileReader;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class WeatherReport {
+    // Data:
+    private double currentTemp = -273;
+    private ArrayList<Double> allTemperatures = new ArrayList<>();
+
+    private String apiUrl = "http://api.openweathermap.org/data/2.5/forecast?q={Tallinn},{EE}&units=metric&APPID=42b13007be0d337745591f429f617215";
+
+    private JSONObject jsonFile;
     public WeatherReport(double latitude, double longitude) {
     }
 
-    public WeatherReport(String city, String country, String format) {
+    public WeatherReport(String city, String country, String format){
+        UrlFileReader urlFileReader = new UrlFileReader();
+        try {
+            String urlReadContent = urlFileReader.readFromUrl(apiUrl);
+            jsonFile = new JSONObject(urlReadContent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        getDataFromFileAndSetPrivateValues(jsonFile);
+    }
+
+    private void getDataFromFileAndSetPrivateValues(JSONObject jsonFile) {
+        this.currentTemp = jsonFile.getJSONArray("list").getJSONObject(0).getJSONObject("main").getDouble("temp");
+
+        // Write all temperatures.
+        for (int measureTimes = 0; measureTimes < 39; measureTimes++) {
+            allTemperatures.add(
+                    jsonFile.getJSONArray("list").getJSONObject(measureTimes).getJSONObject("main").getDouble("temp"));
+        }
     }
 
     public double getDayTemp() {
@@ -30,25 +58,45 @@ public class WeatherReport {
     }
 
     public ArrayList<Double> getCurrentDayTemperatures() {
-        ArrayList<Double> currentDayTemps = new ArrayList<Double>();
-        currentDayTemps.add(-301.0);
-        currentDayTemps.add(301.0);
-        for (int i = 0; i < 30; i++) {
-            currentDayTemps.add(0d);
+        int currentDayMeasurements = 8;
+        ArrayList<Double> oneDayTemperatures = new ArrayList<>();
+
+        // Get all 8 measures for one day.
+        for (int currentMeasure = 0; currentMeasure < currentDayMeasurements; currentMeasure++) {
+            oneDayTemperatures.add(allTemperatures.get(currentMeasure));
         }
-        return currentDayTemps;
+
+        // Get min and max temps for that day and return it.
+        ArrayList<Double> currentDayTemperatures = new ArrayList<>();
+        currentDayTemperatures.add(getDayMinTemp(oneDayTemperatures));
+        currentDayTemperatures.add(getDayMaxTemp(oneDayTemperatures));
+
+        return currentDayTemperatures;
     }
 
-    public double getDayMaxTemp() {
-        return -300;
+    public double getDayMaxTemp(ArrayList<Double> dayTemps) {
+        double maxTemp = -300;
+        for (Double temperature: dayTemps) {
+            if (temperature >= maxTemp) {
+                maxTemp = temperature;
+            }
+        }
+
+        return maxTemp;
     }
 
-    public double getDayMinTemp() {
-        return 300;
+    public double getDayMinTemp(ArrayList<Double> dayTemps) {
+        double minTemp = 300;
+        for (Double temperature: dayTemps) {
+            if (temperature <= minTemp) {
+                minTemp = temperature;
+            }
+        }
+        return minTemp;
     }
 
     public double getCurrentTemp() {
-        return -273;
+        return this.currentTemp;
     }
 
     public double getNightTemp() {
@@ -56,11 +104,19 @@ public class WeatherReport {
     }
 
     public ArrayList<Double> getThreeDayTemperatures() {
-        ArrayList<Double> threeDayTemperatures = new ArrayList<Double>();
-        threeDayTemperatures.add(-300.0);
-        threeDayTemperatures.add(1000.0);
-        for (int i = 0; i < 30; i++) {
-            threeDayTemperatures.add(0d);
+        ArrayList<Double> threeDayTemperatures = new ArrayList<>();
+        for (int days = 1; days <= 3; days++) {
+            ArrayList<Double> oneDayTemperatures = new ArrayList<>();
+            int currentDayMeasurements = 8;
+            for (int currentMeasure = 0; currentMeasure < currentDayMeasurements; currentMeasure++) {
+                oneDayTemperatures.add(allTemperatures.get(days * currentMeasure));
+            }
+
+            ArrayList<Double> currentDayTemperatures = new ArrayList<>();
+            currentDayTemperatures.add(getDayMinTemp(oneDayTemperatures));
+            currentDayTemperatures.add(getDayMaxTemp(oneDayTemperatures));
+
+            threeDayTemperatures.addAll(currentDayTemperatures);
         }
         return threeDayTemperatures;
     }

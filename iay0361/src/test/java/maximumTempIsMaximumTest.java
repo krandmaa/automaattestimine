@@ -1,6 +1,6 @@
 import org.junit.Test;
-import weatherApi.WeatherApi;
-import weatherApi.WeatherReport;
+import weatherapi.WeatherApi;
+import weatherapi.WeatherReport;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ public class maximumTempIsMaximumTest {
             WeatherApi api = new WeatherApi();
             WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
             ArrayList<Double> oneDayTemperatures = report.getCurrentDayTemperatures();
-            double maxTemp = report.getDayMaxTemp();
+            double maxTemp = report.getDayMaxTemp(oneDayTemperatures);
 
             for (double temp : oneDayTemperatures) {
                 if (temp > maxTemp) {

@@ -1,6 +1,6 @@
 import org.junit.Test;
-import weatherApi.WeatherApi;
-import weatherApi.WeatherReport;
+import weatherapi.WeatherApi;
+import weatherapi.WeatherReport;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ public class minimumTempIsMinimumTest {
             WeatherApi api = new WeatherApi();
             WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
             ArrayList<Double> oneDayTemperatures = report.getCurrentDayTemperatures();
-            double minTemp = report.getDayMinTemp();
+            double minTemp = report.getDayMinTemp(oneDayTemperatures);
 
             for (double temp : oneDayTemperatures) {
                 if (temp < minTemp) {
