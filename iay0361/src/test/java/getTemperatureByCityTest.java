@@ -10,7 +10,7 @@ public class getTemperatureByCityTest {
         double dayAverageTempCelsius = -273;
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
             dayAverageTempCelsius = report.getCurrentTemp();
         } catch (Exception e) {
             e.printStackTrace();

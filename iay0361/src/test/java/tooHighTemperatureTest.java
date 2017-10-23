@@ -12,7 +12,7 @@ public class tooHighTemperatureTest {
     public void testTemperatureNotTooHot() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
             ArrayList<Double> threeDayTemperatures = report.getThreeDayTemperatures();
             int abnormallyHotTemperature = 150;
 

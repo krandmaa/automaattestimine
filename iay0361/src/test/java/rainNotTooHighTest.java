@@ -10,11 +10,11 @@ public class rainNotTooHighTest {
     public void TestRainNotTooHighMM() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
             double hourRainMM = report.getDayRainMM().get(1);
-            assertTrue(hourRainMM <= 20);
+            assertTrue(hourRainMM <= 20 && 0 <= hourRainMM);
         } catch (Exception e) {
-            fail("Found too high rain in millimetres for one hour.");
+            fail("Found too high or negative rain in millimetres for one hour.");
         }
     }
 }

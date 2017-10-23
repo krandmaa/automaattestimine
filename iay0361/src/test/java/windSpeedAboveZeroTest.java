@@ -9,7 +9,7 @@ public class windSpeedAboveZeroTest {
     public void testWindSpeedAboveZero(){
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
             double currentWindSpeed = report.getDayWindSpeed();
             assertTrue(currentWindSpeed >= 0);
         } catch (Exception e) {

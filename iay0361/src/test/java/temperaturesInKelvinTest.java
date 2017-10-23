@@ -12,7 +12,7 @@ public class temperaturesInKelvinTest {
     public void testTemperaturesInKelvinAboveZero() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "standard");
+            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "standard");
             ArrayList<Double> threeDayTemperatures = report.getThreeDayTemperatures();
             for (double temp : threeDayTemperatures) {
                 if (temp <= 0) {

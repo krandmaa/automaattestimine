@@ -12,7 +12,7 @@ public class minimumTempIsMinimumTest {
     public void testDailyMinimumTemperature() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
             ArrayList<Double> oneDayTemperatures = report.getCurrentDayTemperatures();
             double minTemp = report.getDayMinTemp(oneDayTemperatures);
 

@@ -12,7 +12,7 @@ public class oneDayTempForecastCountCorrectTest {
     public void GetOneDayTemperaturesCountCorrect() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
             ArrayList<Double> oneDayTemps = report.getCurrentDayTemperatures();
 
             assertTrue(oneDayTemps.size() <= 8);

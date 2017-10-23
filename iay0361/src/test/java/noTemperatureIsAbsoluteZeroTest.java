@@ -12,7 +12,7 @@ public class noTemperatureIsAbsoluteZeroTest {
     public void testTemperatureAboveAbsoluteZero() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
             ArrayList<Double> threeDayTemperatures = report.getThreeDayTemperatures();
             int absoluteZero = -273;
 

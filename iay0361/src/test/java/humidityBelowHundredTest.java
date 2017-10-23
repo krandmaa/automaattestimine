@@ -9,7 +9,7 @@ public class humidityBelowHundredTest {
     public void testHumidityBelowHundred(){
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
             double currentHumidity = report.getCurrentHumidity();
             assertTrue(currentHumidity <= 100 && currentHumidity >= 0);
         } catch (Exception e) {

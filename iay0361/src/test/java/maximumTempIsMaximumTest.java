@@ -12,7 +12,7 @@ public class maximumTempIsMaximumTest {
     public void testDailyMaximumTemperature() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
             ArrayList<Double> oneDayTemperatures = report.getCurrentDayTemperatures();
             double maxTemp = report.getDayMaxTemp(oneDayTemperatures);
 
