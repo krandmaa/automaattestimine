@@ -10,10 +10,6 @@ public class WeatherReport {
     private double currentTemp = -273;
     private ArrayList<Double> allTemperatures = new ArrayList<>();
 
-    private String location = "{Tallinn},{EE}";
-    private String units = "metric";
-    private String apiId = "42b13007be0d337745591f429f617215";
-
     private JSONObject jsonFile;
     public WeatherReport(double latitude, double longitude) {
     }
