@@ -1,6 +1,6 @@
 import org.json.JSONObject;
 import org.junit.Test;
-import urlfilereader.UrlFileReader;
+import fileIO.UrlFileReader;
 
 import static org.junit.Assert.assertTrue;
 

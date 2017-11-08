@@ -1,9 +1,13 @@
 package weatherapi;
 
+import fileIO.LocationFileReader;
+
+import java.io.IOException;
+
 //Store information about location and format.
 public class Location {
-    private static String cityName = "tallinn";
-    private static String countryCode = "ee";
+    private static String cityName = "";
+    private static String countryCode = "";
     private static String format = "metric";
 
 
@@ -29,5 +33,20 @@ public class Location {
 
     public static void setFormat(String format) {
         Location.format = format;
+    }
+
+    public static void readLocationFromFile() {
+        LocationFileReader reader = new LocationFileReader();
+        try {
+            String[] fileLocationData = reader.readLocationFromFile();
+            Location.setCityName(fileLocationData[0]);
+            Location.setCountryCode(fileLocationData[1]);
+            Location.setFormat(fileLocationData[2]);
+        } catch (IOException e) {
+            System.out.println("Failed to read from file, using defaults.");
+            Location.setCityName("Tallinn");
+            Location.setCountryCode("EE");
+            Location.setFormat("metric");
+        }
     }
 }

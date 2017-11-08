@@ -1,6 +1,6 @@
 package weatherapi;
 
-import urlfilereader.UrlFileReader;
+import fileIO.UrlFileReader;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class WeatherReport {
     }
 
     private WeatherReport(String city, String country, String format, int days){
-        String location = "{" + city.toUpperCase() + "},{" + country.toUpperCase() + "}";
+        String location = city.toUpperCase() + "," + country.toUpperCase();
         String units = format.toLowerCase();
         String apiId = "42b13007be0d337745591f429f617215";
         String apiUrl = "http://api.openweathermap.org/data/2.5/forecast?q="
