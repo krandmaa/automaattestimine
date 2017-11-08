@@ -1,0 +1,8 @@
+Location: Berlin, DE; Data in: metric
+
+Current day minimum: -0.57
+Current day maximum: 5.67
+Second day minimum: 0.61
+Second day maximum: 7.15
+Third day minimum: -0.57
+Third day maximum: 8.15
