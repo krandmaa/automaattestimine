@@ -34,7 +34,6 @@ public class testTemperatures {
             WeatherReport report = api.createOneDayWeatherReport(location);
             ArrayList<Double> threeDayTemperatures = report.getCurrentDayTemperatures();
             int abnormallyHotTemperature = 150;
-
             for (double temp : threeDayTemperatures) {
                 if (temp >= abnormallyHotTemperature) {
                     fail("Higher than possible temperature found.");
@@ -43,6 +42,7 @@ public class testTemperatures {
             assertTrue(true);
         } catch (Exception e) {
             e.printStackTrace();
+            fail("No data.");
         }
     }
 
@@ -61,6 +61,7 @@ public class testTemperatures {
             assertTrue(true);
         } catch (Exception e) {
             e.printStackTrace();
+            fail("No data.");
         }
     }
 
@@ -80,6 +81,7 @@ public class testTemperatures {
             assertTrue(true);
         } catch (Exception e) {
             e.printStackTrace();
+            fail("No data.");
         }
     }
 
@@ -99,6 +101,7 @@ public class testTemperatures {
             assertTrue(true);
         } catch (Exception e) {
             e.printStackTrace();
+            fail("No data.");
         }
     }
 
@@ -113,6 +116,7 @@ public class testTemperatures {
             assertTrue(maxTemp >= minTemp);
         } catch (Exception e) {
             e.printStackTrace();
+            fail("No data.");
         }
     }
 
@@ -123,7 +127,6 @@ public class testTemperatures {
             WeatherReport report = api.createOneDayWeatherReport(location);
             ArrayList<Double> oneDayTemperatures = report.getCurrentDayTemperatures();
             double maxTemp = report.getDayMaxTemp(oneDayTemperatures);
-
             for (double temp : oneDayTemperatures) {
                 if (temp > maxTemp) {
                     fail("Found higher temperature.");
@@ -132,6 +135,7 @@ public class testTemperatures {
             assertTrue(true);
         } catch (Exception e) {
             e.printStackTrace();
+            fail("No data.");
         }
     }
 

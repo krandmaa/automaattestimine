@@ -32,6 +32,7 @@ public class testWind {
             assertTrue(currentWindSpeed >= 0);
         } catch (Exception e) {
             e.printStackTrace();
+            fail("Wind degree negative or not less than 360 degrees.");
         }
     }
 

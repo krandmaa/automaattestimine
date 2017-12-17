@@ -13,6 +13,11 @@ public class WeatherReport {
     private ArrayList<Double> allTemperatures = new ArrayList<>();
 
     private JSONObject jsonFile;
+    private double currentWindDegree = -1;
+    private double currentPressure = -1;
+    private double currentHumidity = -1;
+    private double currentWindSpeed = -1;
+
     public WeatherReport(double latitude, double longitude) {
     }
 
@@ -70,19 +75,23 @@ public class WeatherReport {
             allTemperatures.add(
                     jsonFile.getJSONArray("list").getJSONObject(measureTimes).getJSONObject("main").getDouble("temp"));
         }
+        // Write rest weather data.
+        this.currentHumidity = jsonFile.getJSONArray("list").getJSONObject(0).getJSONObject("main").getDouble("humidity");
+        this.currentWindDegree = jsonFile.getJSONArray("list").getJSONObject(0).getJSONObject("wind").getDouble("deg");
+        this.currentWindSpeed = jsonFile.getJSONArray("list").getJSONObject(0).getJSONObject("wind").getDouble("speed");
+        this.currentPressure = jsonFile.getJSONArray("list").getJSONObject(0).getJSONObject("main").getDouble("pressure");
     }
 
     public double getDayWindDegree() {
-        //TODO: implement correct wind degree.
-        return 1;
+        return this.currentWindDegree;
     }
 
     public double getCurrentPressure() {
-        return 1000;
+        return this.currentPressure;
     }
 
     public double getCurrentHumidity() {
-        return 90;
+        return this.currentHumidity;
     }
 
     public ArrayList<Double> getCurrentDayTemperatures() {
@@ -152,17 +161,9 @@ public class WeatherReport {
         return this.allTemperatures.size() > 8;
     }
 
-    public ArrayList<Double> getDayRainMM() {
-        //TODO: Implement rain.
-        ArrayList<Double> dayRainMM = new ArrayList<>();
-        dayRainMM.add(5.0);
-        dayRainMM.add(1.0);
-        return dayRainMM;
-    }
 
     public double getDayWindSpeed() {
-        //TODO: Implement wind speed.
-        return 1;
+        return this.currentWindSpeed;
     }
 
     public String getFirstDayForecast() {
