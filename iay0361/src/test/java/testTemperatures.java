@@ -1,4 +1,7 @@
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import weatherapi.Location;
 import weatherapi.WeatherApi;
 import weatherapi.WeatherReport;
 
@@ -9,13 +12,27 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class testTemperatures {
+    Location location;
+
+    @Before
+    public void setUp() {
+        this.location = new Location();
+        this.location.setCityName("Tallinn");
+        this.location.setCountryCode("EE");
+        this.location.setFormat("metric");
+    }
+
+    @After
+    public void tearDown() {
+        this.location = null;
+    }
 
     @Test
     public void testTemperatureNotTooHot() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
-            ArrayList<Double> threeDayTemperatures = report.getThreeDayTemperatures();
+            WeatherReport report = api.createOneDayWeatherReport(location);
+            ArrayList<Double> threeDayTemperatures = report.getCurrentDayTemperatures();
             int abnormallyHotTemperature = 150;
 
             for (double temp : threeDayTemperatures) {
@@ -33,8 +50,9 @@ public class testTemperatures {
     public void testTemperaturesInKelvinAboveZero() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "standard");
-            ArrayList<Double> threeDayTemperatures = report.getThreeDayTemperatures();
+            location.setFormat("standard");
+            WeatherReport report = api.createOneDayWeatherReport(location);
+            ArrayList<Double> threeDayTemperatures = report.getCurrentDayTemperatures();
             for (double temp : threeDayTemperatures) {
                 if (temp <= 0) {
                     fail("Impossible kelvin temperature");
@@ -50,8 +68,8 @@ public class testTemperatures {
     public void testTemperatureAboveAbsoluteZero() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
-            ArrayList<Double> threeDayTemperatures = report.getThreeDayTemperatures();
+            WeatherReport report = api.createOneDayWeatherReport(location);
+            ArrayList<Double> threeDayTemperatures = report.getCurrentDayTemperatures();
             int absoluteZero = -273;
 
             for (double temp : threeDayTemperatures) {
@@ -69,7 +87,7 @@ public class testTemperatures {
     public void testDailyMinimumTemperature() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport(location);
             ArrayList<Double> oneDayTemperatures = report.getCurrentDayTemperatures();
             double minTemp = report.getDayMinTemp(oneDayTemperatures);
 
@@ -88,7 +106,7 @@ public class testTemperatures {
     public void testMinTempLowerThanMaxTemp() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport(location);
             ArrayList<Double> oneDayTemperatures = report.getCurrentDayTemperatures();
             double maxTemp = report.getDayMaxTemp(oneDayTemperatures);
             double minTemp = report.getDayMinTemp(oneDayTemperatures);
@@ -102,7 +120,7 @@ public class testTemperatures {
     public void testDailyMaximumTemperature() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport(location);
             ArrayList<Double> oneDayTemperatures = report.getCurrentDayTemperatures();
             double maxTemp = report.getDayMaxTemp(oneDayTemperatures);
 
@@ -120,8 +138,10 @@ public class testTemperatures {
     @Test
     public void testCelsiusToFahrenheitConversion() {
         WeatherApi api = new WeatherApi();
-        WeatherReport reportFahrenheit = api.createOneDayWeatherReport("Tallinn" , "EE", "imperial");
-        WeatherReport reportMetric = api.createOneDayWeatherReport("Tallinn" , "EE", "metric");
+        location.setFormat("imperial");
+        WeatherReport reportFahrenheit = api.createOneDayWeatherReport(location);
+        location.setFormat("metric");
+        WeatherReport reportMetric = api.createOneDayWeatherReport(location);
 
         double dayAverageTempCelsius = reportMetric.getCurrentTemp();
         double dayAverageTempFahrenheit = reportFahrenheit.getCurrentTemp();
@@ -132,8 +152,9 @@ public class testTemperatures {
     @Test
     public void testFahrenheitToCelsiusConversion() {
         WeatherApi api = new WeatherApi();
-        WeatherReport reportMetric = api.createOneDayWeatherReport("Tallinn" , "EE", "metric");
-        WeatherReport reportFahrenheit = api.createOneDayWeatherReport("Tallinn" , "EE", "imperial");
+        WeatherReport reportMetric = api.createOneDayWeatherReport(location);
+        location.setFormat("imperial");
+        WeatherReport reportFahrenheit = api.createOneDayWeatherReport(location);
 
         double dayAverageTempCelsius = reportMetric.getCurrentTemp();
         double dayAverageTempFahrenheit = reportFahrenheit.getCurrentTemp();

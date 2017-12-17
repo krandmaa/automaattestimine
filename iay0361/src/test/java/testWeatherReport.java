@@ -1,4 +1,7 @@
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import weatherapi.Location;
 import weatherapi.WeatherApi;
 import weatherapi.WeatherReport;
 
@@ -8,12 +11,26 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class testWeatherReport {
+    Location location;
+
+    @Before
+    public void setUp() {
+        this.location = new Location();
+        this.location.setCityName("Tallinn");
+        this.location.setCountryCode("EE");
+        this.location.setFormat("metric");
+    }
+
+    @After
+    public void tearDown() {
+        this.location = null;
+    }
 
     @Test
     public void getThreeDayTemperaturesCountCorrect() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport(location);
             ArrayList<Double> oneDayTemps = report.getCurrentDayTemperatures();
 
             assertTrue(oneDayTemps.size() <= 24);
@@ -26,7 +43,7 @@ public class testWeatherReport {
     public void getOneDayTemperaturesCountCorrect() {
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport(location);
             ArrayList<Double> oneDayTemps = report.getCurrentDayTemperatures();
 
             assertTrue(oneDayTemps.size() <= 8);
@@ -36,40 +53,16 @@ public class testWeatherReport {
     }
 
     @Test
-    public void getCurrentCoordinatesTemperature() {
-        double dayAverageTempCelsius = -273;
-        try {
-            WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createWeatherReport(35, 139);
-            dayAverageTempCelsius = report.getDayTemp();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        assertTrue(dayAverageTempCelsius != -273);
-    }
-
-    @Test
     public void getCurrentCityTemperature() {
         double dayAverageTempCelsius = -273;
         try {
             WeatherApi api = new WeatherApi();
-            WeatherReport report = api.createOneDayWeatherReport("Tallinn", "EE", "metric");
+            WeatherReport report = api.createOneDayWeatherReport(location);
             dayAverageTempCelsius = report.getCurrentTemp();
         } catch (Exception e) {
             e.printStackTrace();
         }
         assertTrue(dayAverageTempCelsius != -273);
-    }
-
-    @Test
-    public void TestForecastFileFormat() {
-        try {
-            WeatherApi api = new WeatherApi();
-            String fileName = api.getForecastFileName();
-            assertTrue(fileName.toLowerCase().endsWith("xml") || fileName.toLowerCase().endsWith("json"));
-        } catch (Exception e) {
-            fail("Could not get forecast file in proper format.");
-        }
     }
 }
 

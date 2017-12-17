@@ -6,47 +6,50 @@ import java.io.IOException;
 
 //Store information about location and format.
 public class Location {
-    private static String cityName = "";
-    private static String countryCode = "";
-    private static String format = "metric";
+    private String cityName = "";
+    private String countryCode = "";
+    private String format = "metric";
+    private String latitude = "";
+    private String longitude = "";
 
 
-    public static String getCityName() {
-        return cityName;
+    public String getCityName() {
+        return this.cityName;
     }
 
-    public static void setCityName(String cityName) {
-        Location.cityName = cityName;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
-    public static String getCountryCode() {
-        return countryCode;
+    public String getCountryCode() {
+        return this.countryCode;
     }
 
-    public static void setCountryCode(String countryCode) {
-        Location.countryCode = countryCode;
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
 
-    public static String getFormat() {
-        return format;
+    public String getFormat() {
+        return this.format;
     }
 
-    public static void setFormat(String format) {
-        Location.format = format;
+    public void setFormat(String format) {
+        this.format = format;
     }
 
-    public static void readLocationFromFile() {
-        LocationFileReader reader = new LocationFileReader();
-        try {
-            String[] fileLocationData = reader.readLocationFromFile();
-            Location.setCityName(fileLocationData[0]);
-            Location.setCountryCode(fileLocationData[1]);
-            Location.setFormat(fileLocationData[2]);
-        } catch (IOException e) {
-            System.out.println("Failed to read from file, using defaults.");
-            Location.setCityName("Tallinn");
-            Location.setCountryCode("EE");
-            Location.setFormat("metric");
-        }
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 }

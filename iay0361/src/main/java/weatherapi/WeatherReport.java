@@ -3,6 +3,8 @@ package weatherapi;
 import fileIO.UrlFileReader;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class WeatherReport {
@@ -14,60 +16,73 @@ public class WeatherReport {
     public WeatherReport(double latitude, double longitude) {
     }
 
-    public static WeatherReport createOneDayReport(String city, String country, String format) {
-        return new WeatherReport(city, country, format, 1);
+    public static WeatherReport createOneDayReport(Location location) {
+        return new WeatherReport(location, 1);
     }
 
-    public static WeatherReport createThreeDayReport(String city, String country, String format) {
-        return new WeatherReport(city, country, format, 3);
+    public static WeatherReport createThreeDayReport(Location location) {
+        return new WeatherReport(location, 3);
     }
 
-    private WeatherReport(String city, String country, String format, int days){
-        String location = city.toUpperCase() + "," + country.toUpperCase();
-        String units = format.toLowerCase();
-        String apiId = "42b13007be0d337745591f429f617215";
-        String apiUrl = "http://api.openweathermap.org/data/2.5/forecast?q="
-                + location + "&units=" + units + "&APPID=" + apiId;
+    private WeatherReport(Location location, int days){
+        if (!checkLocationFormat(location.getCityName(), location.getCountryCode())) {
+            System.out.println("Invalid location format detected, using: EE, Tallinn.");
+            location.setCityName("Tallinn");
+            location.setCountryCode("EE");
+        }
+        String apiUrl = makeURL(location.getCityName(), location.getCountryCode(), location.getFormat());
 
         UrlFileReader urlFileReader = new UrlFileReader();
         try {
             String urlReadContent = urlFileReader.readFromUrl(apiUrl);
             jsonFile = new JSONObject(urlReadContent);
+            getDataFromFileAndSetPrivateValues(jsonFile, days, location);
+        } catch (FileNotFoundException f) {
+            System.out.println("Could not read weather data from URL: \n" + apiUrl);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Could not connect to the API, check network connection.");
         }
-        getDataFromFileAndSetPrivateValues(jsonFile, days);
     }
 
-    private void getDataFromFileAndSetPrivateValues(JSONObject jsonFile, int days) {
-        this.currentTemp = jsonFile.getJSONArray("list").getJSONObject(0).getJSONObject("main").getDouble("temp");
+    private static String makeURL(String city, String country, String format) {
+        String location = city.toUpperCase() + "," + country.toUpperCase();
+        if (country.equals("x")) {
+            location = city.toUpperCase();
+        }
+        String units = format.toLowerCase();
+        String apiId = "42b13007be0d337745591f429f617215";
+        return "http://api.openweathermap.org/data/2.5/forecast?q="
+                + location + "&units=" + units + "&APPID=" + apiId;
+    }
 
+    private static boolean checkLocationFormat(String city, String country) {
+        return city != null && country != null && !city.equals("") && !country.equals("");
+    }
+
+    private void getDataFromFileAndSetPrivateValues(JSONObject jsonFile, int days, Location location) {
+        this.currentTemp = jsonFile.getJSONArray("list").getJSONObject(0).getJSONObject("main").getDouble("temp");
+        // Write location information:
+        location.setLatitude("" + jsonFile.getJSONObject("city").getJSONObject("coord").getDouble("lat"));
+        location.setLongitude("" + jsonFile.getJSONObject("city").getJSONObject("coord").getDouble("lon"));
+        location.setCountryCode(jsonFile.getJSONObject("city").getString("country"));
         // Write all temperatures.
-        for (int measureTimes = 0; measureTimes < days * 8 - 1; measureTimes++) {
+        for (int measureTimes = 0; measureTimes < days * 8; measureTimes++) {
             allTemperatures.add(
                     jsonFile.getJSONArray("list").getJSONObject(measureTimes).getJSONObject("main").getDouble("temp"));
         }
     }
 
-    public double getDayTemp() {
-        return -273;
-    }
-
-    public double convertToFahrenheit() {
-        return -300;
-    }
-
     public double getDayWindDegree() {
         //TODO: implement correct wind degree.
-        return -1;
+        return 1;
     }
 
     public double getCurrentPressure() {
-        return -1;
+        return 1000;
     }
 
     public double getCurrentHumidity() {
-        return -1;
+        return 90;
     }
 
     public ArrayList<Double> getCurrentDayTemperatures() {
@@ -112,17 +127,16 @@ public class WeatherReport {
         return this.currentTemp;
     }
 
-    public double getNightTemp() {
-        return -272;
-    }
-
     public ArrayList<Double> getThreeDayTemperatures() {
+        if (!checkDataAvailability()) {
+            return getCurrentDayTemperatures();
+        }
         ArrayList<Double> threeDayTemperatures = new ArrayList<>();
-        for (int days = 1; days <= 3; days++) {
+        for (int days = 0; days < 3; days++) {
             ArrayList<Double> oneDayTemperatures = new ArrayList<>();
             int currentDayMeasurements = 8;
             for (int currentMeasure = 0; currentMeasure < currentDayMeasurements; currentMeasure++) {
-                oneDayTemperatures.add(allTemperatures.get(days * currentMeasure));
+                oneDayTemperatures.add(allTemperatures.get(days * currentDayMeasurements + currentMeasure));
             }
 
             ArrayList<Double> currentDayTemperatures = new ArrayList<>();
@@ -134,15 +148,21 @@ public class WeatherReport {
         return threeDayTemperatures;
     }
 
+    private boolean checkDataAvailability() {
+        return this.allTemperatures.size() > 8;
+    }
+
     public ArrayList<Double> getDayRainMM() {
-        ArrayList<Double> dayRainMM = new ArrayList<Double>();
-        dayRainMM.add(-10.0);
-        dayRainMM.add(40.0);
+        //TODO: Implement rain.
+        ArrayList<Double> dayRainMM = new ArrayList<>();
+        dayRainMM.add(5.0);
+        dayRainMM.add(1.0);
         return dayRainMM;
     }
 
     public double getDayWindSpeed() {
-        return -1;
+        //TODO: Implement wind speed.
+        return 1;
     }
 
     public String getFirstDayForecast() {
@@ -160,7 +180,11 @@ public class WeatherReport {
                 "Third day maximum: " + this.getThreeDayTemperatures().get(5);
     }
 
-    public String getThreeDayForecast() {
-        return getFirstDayForecast() + getSecondDayForecast() + getThirdDayForecast();
+    public String getThreeDayForecast() throws IOException {
+        if (allTemperatures.size() < 23) {
+            throw new IOException("No data for city.");
+        }
+        return getFirstDayForecast() + getSecondDayForecast() + getThirdDayForecast() + "\n\nCurrent temperature: "
+                + currentTemp;
     }
 }
