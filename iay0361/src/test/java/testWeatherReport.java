@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class testWeatherReport {
-    Location location;
+    private Location location;
 
     @Before
     public void setUp() {
@@ -64,6 +64,19 @@ public class testWeatherReport {
         }
         assertTrue(dayAverageTempCelsius != -273);
     }
+
+    @Test
+    public void testReportExists() {
+        WeatherApi api = new WeatherApi();
+        WeatherReport report = api.createThreeDayWeatherReport(location);
+        assertTrue(report.equals(api.getReport()));
+    }
+
+    @Test
+    public void testGetThreeDayTemperatures() {
+        WeatherApi api = new WeatherApi();
+        WeatherReport report = api.createThreeDayWeatherReport(location);
+        int size = report.getThreeDayTemperatures().size();
+        assertTrue(size == 6);
+    }
 }
-
-

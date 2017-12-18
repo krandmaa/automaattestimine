@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class testPressure {
-    Location location;
+    private Location location;
 
     @Before
     public void setUp() {

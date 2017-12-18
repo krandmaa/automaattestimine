@@ -1,9 +1,5 @@
 package weatherapi;
 
-import fileIO.LocationFileReader;
-
-import java.io.IOException;
-
 //Store information about location and format.
 public class Location {
     private String cityName = "";
